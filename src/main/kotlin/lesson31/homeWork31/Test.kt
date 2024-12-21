@@ -71,112 +71,24 @@ enum class Cereal(val local: String) {
     BULGUR("Булгур")
 }
 
-class CerealStorageImpl(
-    override val containerCapacity: Float,
-    override val storageCapacity: Float
-) : CerealStorage {
+//class CerealStorageImpl(
+//    override val containerCapacity: Float,
+//    override val storageCapacity: Float
+//) : CerealStorage {
+//
+//    init {
+//        require(containerCapacity >= 0) { "Объём контейнера не может быть отрицательным" }
+//        require(storageCapacity >= containerCapacity) { "Совокупный объём хранилища не может быть меньше объёма одного контейнера" }
+//    }
+//
+//    private val containers = mutableMapOf<Cereal, Float>()
+//
+//    override fun addCereal(cereal: Cereal, amount: Float): Float {
+//        require(amount >= 0) { "Количество добавляемой крупы не может быть отрицательным" }
+//
+//}
+//
 
-    init {
-        require(containerCapacity >= 0) { "Объём контейнера не может быть отрицательным" }
-        require(storageCapacity >= containerCapacity) { "Совокупный объём хранилища не может быть меньше объёма одного контейнера" }
-    }
-
-    private val containers = mutableMapOf<Cereal, Float>()
-
-    override fun addCereal(cereal: Cereal, amount: Float): Float {
-        require(amount >= 0) { "Количество добавляемой крупы не может быть отрицательным" }
-
-        var remaining = amount
-        if (containers.containsKey(cereal)) {
-            val currentAmount = containers[cereal]!!
-            val availableSpace = containerCapacity - currentAmount
-            if (remaining <= availableSpace) {
-                containers[cereal] = currentAmount + remaining
-                remaining = 0f
-            } else {
-                containers[cereal] = containerCapacity
-                remaining -= availableSpace
-            }
-        } else {
-            if (containers.size * containerCapacity + amount > storageCapacity) {
-                throw IllegalStateException("Недостаточно места в хранилище для нового контейнера")
-            }
-            if (amount <= containerCapacity) {
-                containers[cereal] = amount
-                remaining = 0f
-            } else {
-                containers[cereal] = containerCapacity
-                remaining -= containerCapacity
-            }
-        }
-        return remaining
-    }
-
-    override fun getCereal(cereal: Cereal, amount: Float): Float {
-        require(amount >= 0) { "Количество запрашиваемой крупы не может быть отрицательным" }
-
-        if (!containers.containsKey(cereal)) {
-            return 0f
-        }
-
-        val currentAmount = containers[cereal]!!
-        if (currentAmount >= amount) {
-            containers[cereal] = currentAmount - amount
-            return amount
-        } else {
-            val actualAmount = currentAmount
-            containers.remove(cereal)
-            return actualAmount
-        }
-    }
-
-    override fun removeContainer(cereal: Cereal): Boolean {
-        if (containers.containsKey(cereal) && containers[cereal] == 0f) {
-            containers.remove(cereal)
-            return true
-        }
-        return false
-    }
-
-    override fun getAmount(cereal: Cereal): Float {
-        return containers.getOrDefault(cereal, 0f)
-    }
-
-    override fun getSpace(cereal: Cereal): Float {
-        if (containers.containsKey(cereal)) {
-            val currentAmount = containers[cereal]!!
-            return containerCapacity - currentAmount
-        }
-        return containerCapacity
-    }
-
-    override fun toString(): String {
-        return containers.entries.joinToString(", ") { (cereal, amout) ->
-            "${cereal.local}  $amout/$containerCapacity"
-        }
-    }
-}
-
-fun main() {
-    val cerealStorage = CerealStorageImpl(10f, 50f)
-    // Добавляем крупу в хранилище
-    cerealStorage.addCereal(Cereal.BUCKWHEAT, 8f)
-    cerealStorage.addCereal(Cereal.RICE, 5f)
-    cerealStorage.addCereal(Cereal.PEAS, 10f)
-
-
-    println("Состояние хранилища: $cerealStorage")
-    println("\n")
-    // Забираем немного крупы
-    cerealStorage.getCereal(Cereal.BUCKWHEAT, 3f)
-    println("После изъятия гречки: $cerealStorage")
-    println("\n")
-    // Пробуем удалить пустой контейнер
-    cerealStorage.getCereal(Cereal.RICE, 5f) // Освобождаем контейнер
-    val removed = cerealStorage.removeContainer(Cereal.RICE)
-    println("Контейнер с рисом удалён: $removed")
-    println("После удаления контейнера: $cerealStorage")
-}
 
 //Пример имплементации интерфейса с блоком инициализации класса
 

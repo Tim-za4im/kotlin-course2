@@ -17,6 +17,7 @@ data class User(
     val isActive: Boolean,
     val address: Address
 )
+
 data class University(
     val name: String,
     val foundationYear: Int,
@@ -37,6 +38,7 @@ data class Student(
     val age: Int,
     val major: String?,
 )
+
 fun main() {}
 
 
@@ -64,28 +66,8 @@ fun main() {}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//
-//
-//
-//}
-//
-//
-//class calculator31(){
-//    fun plus31(a:Int,b:Int)=a+b
+class Calculator31() {
+    fun plus31(a: Int, b: Int) = a + b}
 //}
 //class SimpleTest {
 //
